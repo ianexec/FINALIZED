@@ -30,7 +30,7 @@ commonname=none
 email=none
 
 # simple password minimal
-curl -sS ${REPO}ssh/password | openssl aes-256-cbc -d -a -pass pass:scvps07gg -pbkdf2 > /etc/pam.d/common-password
+curl -sS ${REPO}ssh_module/password | openssl aes-256-cbc -d -a -pass pass:scvps07gg -pbkdf2 > /etc/pam.d/common-password
 chmod +x /etc/pam.d/common-password
 
 # go to root
@@ -102,7 +102,7 @@ sed -i 's/AcceptEnv/#AcceptEnv/g' /etc/ssh/sshd_config
 apt -y install nginx libxml-parser-perl
 rm /etc/nginx/sites-enabled/default
 rm /etc/nginx/sites-available/default
-curl ${REPO}ssh/nginx.conf > /etc/nginx/nginx.conf
+curl ${REPO}ssh_module/nginx.conf > /etc/nginx/nginx.conf
 mkdir -p /var/www/html
 chown -R www-data:www-data /var/www/html
 chmod -R g+rw /var/www/html
