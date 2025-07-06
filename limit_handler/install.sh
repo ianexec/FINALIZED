@@ -2,18 +2,18 @@
 set -e
 
 # Download monitor-quota.py
-echo "✅ Downloading monitor-quota.py..."
-wget -O /usr/bin/monitor-quota.py https://raw.githubusercontent.com/ianexec/FINALIZED/main/limit_handler/monitor-quota.py
+echo "✅ Downloading monitor_quota.py..."
+wget -O /usr/bin/monitor_quota.py https://raw.githubusercontent.com/ianexec/FINALIZED/main/limit_handler/monitor_quota.py
 
 # Download autokill.py
-echo "✅ Downloading autokill.py..."
-wget -O /usr/bin/monitor-autokill.py https://raw.githubusercontent.com/ianexec/FINALIZED/main/limit_handler/monitor-autokill.py
+echo "✅ Downloading monitor_autokill.py..."
+wget -O /usr/bin/monitor_autokill.py https://raw.githubusercontent.com/ianexec/FINALIZED/main/limit_handler/monitor_autokill.py
 
 # Set permission monitor_quota.py
-chmod +x /usr/bin/monitor-quota.py
+chmod +x /usr/bin/monitor_quota.py
 
 # set permission autokill.py
-chmod +x /usr/bin/monitor-autokill.py
+chmod +x /usr/bin/monitor_autokill.py
 
 # Buat log file jika belum ada
 touch /var/log/lunatic_quota_monitor.log
@@ -28,7 +28,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/env python3 /usr/bin/monitor-quota.py
+ExecStart=/usr/bin/env python3 /usr/bin/monitor_quota.py
 Restart=always
 RestartSec=10
 StandardOutput=append:/var/log/lunatic_quota_monitor.log
@@ -44,7 +44,7 @@ Description=AutoKill IP Limit for XRAY/SSH Users
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/python3 /usr/bin/monitor-autokill.py
+ExecStart=/usr/bin/python3 /usr/bin/monitor_autokill.py
 Restart=always
 User=root
 
