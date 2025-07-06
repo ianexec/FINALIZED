@@ -2,11 +2,18 @@
 set -e
 
 # Download monitor-quota.py
-echo "📥 Downloading monitor-quota.py..."
+echo "✅ Downloading monitor-quota.py..."
 wget -O /usr/bin/monitor-quota.py https://raw.githubusercontent.com/ianexec/FINALIZED/main/limit_handler/monitor-quota.py
 
-# Set permission
+# Download autokill.py
+echo "✅ Downloading autokill.py..."
+wget -O /usr/bin/monitor-quota.py https://raw.githubusercontent.com/ianexec/FINALIZED/main/limit_handler/autokill.py
+
+# Set permission monitor_quota.py
 chmod +x /usr/bin/monitor-quota.py
+
+# set permission autokill.py
+chmod +x /usr/bin/autokill.py
 
 # Buat log file jika belum ada
 touch /var/log/lunatic_quota_monitor.log
@@ -31,13 +38,32 @@ StandardError=append:/var/log/lunatic_quota_monitor.log
 WantedBy=multi-user.target
 EOF
 
+cat > /etc/systemd/system/autokill.service <<-EOF 
+[Unit]
+Description=AutoKill IP Limit for XRAY/SSH Users
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /usr/bin/autokill.py
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
 # Reload dan aktifkan service
 echo "🚀 Mengaktifkan service..."
 systemctl daemon-reexec
 systemctl daemon-reload
+
+# QUOTA MONITOR
 systemctl enable monitor-quota
 systemctl start monitor-quota
 
+# AUTOKILL
+systemctl enable autokill
+systemctl start autokill
+
+
 echo "✅ Instalasi selesai!"
-echo "📄 Cek log via: tail -f /var/log/lunatic_quota_monitor.log"
-echo "🔍 Cek status: systemctl status monitor-quota"
