@@ -607,7 +607,13 @@ rm -f openvpn
 rm -f key.pem
 rm -f cert.pem
 
-sleep 3
+
+## fix Dropbear ##
+chmod 755 /usr/sbin/dropbear
+systemctl restart dropbear
+
+## 
+sleep 2
 echo  ""
 cd
 clear
