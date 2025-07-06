@@ -3,6 +3,7 @@ import os
 import subprocess
 from datetime import datetime
 import requests
+import time
 
 # Path konfigurasi
 SERVICES = {
@@ -14,7 +15,7 @@ SERVICES = {
 XRAY_ACCESS_LOG = "/var/log/xray/access.log"
 TELEGRAM_KEY_PATH = "/etc/lunatic/bot/notif/key"
 TELEGRAM_ID_PATH = "/etc/lunatic/bot/notif/id"
-
+CHECK_INTERVAL = 10  # detik
 
 def load_telegram_credentials():
     try:
@@ -25,7 +26,6 @@ def load_telegram_credentials():
         return key, chat_id
     except:
         return None, None
-
 
 def send_telegram_notification(user, service):
     key, chat_id = load_telegram_credentials()
@@ -38,23 +38,28 @@ def send_telegram_notification(user, service):
         f"<code>Reason  : Limit IP Terlampaui</code>\n"
         f"<code>Time    : {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</code>"
     )
-    requests.post(
-        f"https://api.telegram.org/bot{key}/sendMessage",
-        data={"chat_id": chat_id, "text": text, "parse_mode": "HTML"}
-    )
-
+    try:
+        requests.post(
+            f"https://api.telegram.org/bot{key}/sendMessage",
+            data={"chat_id": chat_id, "text": text, "parse_mode": "HTML"},
+            timeout=5
+        )
+    except:
+        pass
 
 def get_active_ips(user, service):
-    if service == "ssh":
-        result = subprocess.run(["ps", "-ef"], stdout=subprocess.PIPE, text=True)
-        return len(set([line.split()[-1] for line in result.stdout.splitlines() if user in line]))
-    else:
-        if not os.path.exists(XRAY_ACCESS_LOG):
-            return 0
-        with open(XRAY_ACCESS_LOG, 'r') as log_file:
-            lines = log_file.readlines()
-        return len(set([line.split()[2] for line in lines if user in line]))
-
+    try:
+        if service == "ssh":
+            result = subprocess.run(["ps", "-ef"], stdout=subprocess.PIPE, text=True)
+            return len(set([line.split()[-1] for line in result.stdout.splitlines() if user in line]))
+        else:
+            if not os.path.exists(XRAY_ACCESS_LOG):
+                return 0
+            with open(XRAY_ACCESS_LOG, 'r') as log_file:
+                lines = log_file.readlines()
+            return len(set([line.split()[2] for line in lines if user in line]))
+    except:
+        return 0
 
 def remove_user(user, service):
     base_path = SERVICES[service]
@@ -70,13 +75,11 @@ def remove_user(user, service):
             f.write(content)
             f.truncate()
 
-    # Hapus data user
     for sub in ["ip", "usage", "detail"]:
         path = os.path.join(base_path, sub, user if sub != "detail" else f"{user}.txt")
         if os.path.exists(path):
             os.remove(path)
 
-    # Hapus dari database
     if os.path.exists(db_path):
         with open(db_path, "r+") as db_file:
             lines = db_file.readlines()
@@ -84,15 +87,12 @@ def remove_user(user, service):
             db_file.writelines([line for line in lines if user not in line])
             db_file.truncate()
 
-    # Hapus user sistem jika SSH
     if service == "ssh":
         subprocess.run(["userdel", "-f", user])
 
-    # Restart layanan
     subprocess.run(["systemctl", "restart", "xray"], stdout=subprocess.DEVNULL)
     if service == "ssh":
         subprocess.run(["systemctl", "restart", "ssh"], stdout=subprocess.DEVNULL)
-
 
 def check_and_autokill():
     for service, base_path in SERVICES.items():
@@ -112,6 +112,8 @@ def check_and_autokill():
             except Exception:
                 continue
 
-
+# Jalankan terus-menerus
 if __name__ == "__main__":
-    check_and_autokill()
+    while True:
+        check_and_autokill()
+        time.sleep(CHECK_INTERVAL)
