@@ -10,21 +10,6 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 2 0 * * * root /usr/local/sbin/autobackup
 END
 
-# --- Kill Akun Per 1 Menit (Xray & SSH)
-cat >/etc/cron.d/kill_account <<-END
-SHELL=/bin/bash
-PATH=/sbin:/bin:/usr/sbin:/usr/bin
-*/1 * * * * root /usr/local/sbin/kill_exp exp_kill
-*/1 * * * * root /usr/local/sbin/kill_exp vme_kill
-*/1 * * * * root /usr/local/sbin/kill_exp vle_kill
-*/1 * * * * root /usr/local/sbin/kill_exp tro_kill
-*/1 * * * * root /usr/local/sbin/kill_exp ssh_kill
-*/1 * * * * root /usr/local/sbin/killVM.py
-*/1 * * * * root /usr/local/sbin/killVL.py
-*/1 * * * * root /usr/local/sbin/killTR.py
-*/1 * * * * root /usr/local/sbin/killSSH.py
-END
-
 # --- Tambahan Cron untuk Backup Cek Expired Trial setiap 5 menit
 cat >/etc/cron.d/check_trial_expired <<-END
 SHELL=/bin/sh
