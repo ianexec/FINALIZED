@@ -44,8 +44,8 @@ apt install curl socat xz-utils wget apt-transport-https gnupg gnupg2 gnupg1 dns
 apt install socat cron bash-completion ntpdate -y
 ntpdate pool.ntp.org
 apt -y install chrony
-apt install zip -y
-apt install curl pwgen openssl cron -y
+apt -y install zip
+apt -y install curl pwgen openssl cron
 
 # install xray
 sleep 0.5
