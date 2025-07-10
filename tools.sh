@@ -12,6 +12,8 @@ red() { echo -e "\\033[31;1m${*}\\033[0m"; }
 
 echo "Process Install Dependencies"
 sleep 1
+
+export DEBIAN_FRONTEND=noninteractive
 apt update -y
 apt upgrade -y
 apt dist-upgrade -y
