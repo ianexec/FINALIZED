@@ -1,4 +1,6 @@
 #!/bin/bash
+
+export DEBIAN_FRONTEND=noninteractive
 rm -f $0
 Add_To_New_Line(){
 	if [ "$(tail -n1 $1 | wc -l)" == "0"  ];then
