@@ -1,34 +1,65 @@
 #!/bin/bash
-# Jangan Di Decrypt Dong Puuhhh || Lunatic Tunneling || Bandung Barat , Indonesia|| Encrypted shell - obfuscated XOR + base64 loader
 
-_kk=123
-_dd=$(tail -n +10 "$0")
-_zz=$(echo "$_dd" | base64 -d | perl -pe 's/(.)/chr(ord($1)^'"$_kk"')/eg')
-eval "$_zz"
-exit 0
-#==BEGIN==
-WFpUGRIVVBkaCBMKChoLD1sOCx8aDx4KGgsPWxIVCA8aFxdbCwIPExQVSFtWAgoaCw9bEhUIDxoX
-F1sLAg8TFBVIVgsSC1tWAgoaCw9bEhUIDxoXF1sLAg8TFBVIVgkeCg4eCA8IW1YCCgoWEB8SCVtW
-C1tUHg8YVAweGQgUGBAeDwoKCR4LFEZZEw8PCwhBVFQJGgxVHBIPEw4ZDggeCRgUFQ8eFQ9VGBQW
-VBIaFR4DHhhUPTI1OjcyIT4/VBYaEhVZCgoMHB4PW1YKW1Y0W1QeDxhUDB4ZCBQYEB4PVAwIVQsC
-W1lfAAkeCxQGVAweGQgUGBAeDyQeFRwSFR5UDAhVCwJZChgTFhQfW1ADW1QeDxhUDB4ZCBQYEB4P
-VAwIVQsCCgpYWzIVCA8aFxcSFRxbKB4JDRIYHgoYGg9bRVtUHg8YVAgCCA8eFh9UCAIIDx4WVAwI
-VQgeCQ0SGB5bR0dbPjU/CiAuFRIPJgo/HggYCRILDxIUFUYsHhkIFBgQHg8KPxQYDhYeFQ8aDxIU
-FUYTDw8LCEFUVBwUFBwXHlUYFBYKOh0PHglGFR4PDBQJEFUPGgkcHg9bFQgIVhcUFBAOC1UPGgkc
-Hg8KCiAoHgkNEhgeJgovAgseRggSFgsXHgouCB4JRgkUFA8KOBoLGhkSFxIPAjkUDhUfEhUcKB4P
-Rjg6KyQ1Pi8kOj82MjVbODorJDU+LyQ5MjU/JCg+KS0yOD4KOhYZEh4VDzgaCxoZEhcSDxIeCEY4
-OiskNT4vJDo/NjI1Wzg6KyQ1Pi8kOTI1PyQoPiktMjg+CjUUNR4MKwkSDRIXHhweCEYPCQ4eCj4D
-HhgoDxoJD0ZUDggJVBkSFVQLAg8TFBVIW1Y0W1QeDxhUDB4ZCBQYEB4PVAwIVQsCW0pLS0pOCike
-CA8aCQ9GFBVWHRoSFw4JHgoKIDIVCA8aFxcmCiwaFQ8eHzkCRhYOFw8SVg4IHglVDxoJHB4PCj41
-PwoKCAIIDx4WGA8XWx8aHhYUFVYJHhcUGh8KCAIIDx4WGA8XWx4VGhkXHlsMCFUIHgkNEhgeCggC
-CA8eFhgPF1sIDxoJD1sMCFUIHgkNEhgeCggCCA8eFhgPF1sJHggPGgkPWwwIVQgeCQ0SGB4KClhb
-MhUIDxoXFxIVHFsoHgkNEhgeChgaD1tFW1QeDxhUCAIIDx4WH1QIAggPHhZUDAhWFA0LFVUIHgkN
-EhgeW0dHWz41PwogLhUSDyYKPx4IGAkSCw8SFBVGNAseFS0rNQo/FBgOFh4VDxoPEhQVRhMPDwsI
-QVRUHBQUHBceVRgUFgo6HQ8eCUYVHg8MFAkQVQ8aCRweD1sVCAhWFxQUEA4LVQ8aCRweDwoKICge
-CQ0SGB4mCi8CCx5GCBIWCxceCi4IHglGCRQUDwo4GgsaGRIXEg8CORQOFR8SFRwoHg9GODorJDU+
-LyQ6PzYyNVs4OiskNT4vJDkyNT8kKD4pLTI4Pgo6FhkSHhUPOBoLGhkSFxIPEh4IRjg6KyQ1Pi8k
-Oj82MjVbODorJDU+LyQ5MjU/JCg+KS0yOD4KNRQ1HgwrCRINEhceHB4IRg8JDh4KPgMeGCgPGgkP
-RlQOCAlUGRIVVAsCDxMUFUhbVjRbVB4PGFQMHhkIFBgQHg9UDAhVCwJbSktLSkkKKR4IDxoJD0YU
-FVYdGhIXDgkeCgogMhUIDxoXFyYKLBoVDx4fOQJGFg4XDxJWDggeCVUPGgkcHg8KPjU/CgoIAggP
-HhYYDxdbHxoeFhQVVgkeFxQaHwoIAggPHhYYDxdbHhUaGRceWwwIVhQNCxUKCAIIDx4WGA8XWwgP
-GgkPWwwIVhQNCxUKCAIIDx4WGA8XWwkeCA8aCQ9bDAhWFA0LFQoKCRZbVh1bX0sK
+apt update
+apt install python3 -y
+apt install python3-pip -y
+apt install python3-requests -y
+
+mkdir -p /etc/websocket
+
+repo="https://raw.githubusercontent.com/ianexec/FINALIZED/main"
+
+wget -q -O /etc/websocket/ws.py "${repo}/websocket_engine/ws.py"
+chmod +x /etc/websocket/ws.py
+
+# Installing Service
+cat > /etc/systemd/system/ws.service << END
+[Unit]
+Description=Websocket
+Documentation=https://google.com
+After=network.target nss-lookup.target
+
+[Service]
+Type=simple
+User=root
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
+ExecStart=/usr/bin/python3 -O /etc/websocket/ws.py 10015
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+END
+
+systemctl daemon-reload
+systemctl enable ws.service
+systemctl start ws.service
+systemctl restart ws.service
+
+# Installing Service
+cat > /etc/systemd/system/ws-ovpn.service << END
+[Unit]
+Description=OpenVPN
+Documentation=https://google.com
+After=network.target nss-lookup.target
+
+[Service]
+Type=simple
+User=root
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
+ExecStart=/usr/bin/python3 -O /etc/websocket/ws.py 10012
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+END
+
+systemctl daemon-reload
+systemctl enable ws-ovpn
+systemctl start ws-ovpn
+systemctl restart ws-ovpn
+
+rm -f $0
