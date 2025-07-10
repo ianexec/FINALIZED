@@ -90,7 +90,7 @@ apt -y install wget curl
 #figlet
 apt-get install figlet -y
 apt-get install ruby -y
-gem install lolcat
+gem install lolcat -y
 
 # set time GMT +7
 ln -fs /usr/share/zoneinfo/Asia/Jakarta /etc/localtime
@@ -290,9 +290,9 @@ happy conneting
 END
 
 #install bbr dan optimasi kernel
-wget ${REPO}ssh_module/bbr.sh && chmod +x bbr.sh && ./bbr.sh
+wget ${REPO}ssh_module/bbr.sh && chmod +x bbr.sh && yes "" | ./bbr.sh
 
-wget -q ${REPO}ssh_module/ipserver && chmod +x ipserver && ./ipserver
+wget -q ${REPO}ssh_module/ipserver && chmod +x ipserver && yes "" | ./ipserver
 # blokir torrent
 iptables -A FORWARD -m string --string "get_peers" --algo bm -j DROP
 iptables -A FORWARD -m string --string "announce_peer" --algo bm -j DROP
