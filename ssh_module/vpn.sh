@@ -1,5 +1,4 @@
 #!/bin/bash
-export DEBIAN_FRONTEND=noninteractive
 # ==================================================
 # Link Hosting Kalian
 REPO="https://raw.githubusercontent.com/ianexec/FINALIZED/main/"
