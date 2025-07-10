@@ -1,7 +1,7 @@
 #!/bin/bash
 
 rm -f $0
-
+export DEBIAN_FRONTEND=noninteractive
 apt update -y
 apt install curl -y
 apt install wget -y
