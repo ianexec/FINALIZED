@@ -294,7 +294,7 @@ animation_loading() {
 
 
 SETUP_SSH_VPN() {
-wget https://raw.githubusercontent.com/ianexec/FINALIZED/main/ssh_module/ssh-vpn.sh && chmod +x ssh-vpn.sh && yes "" | ./ssh-vpn.sh
+wget https://raw.githubusercontent.com/ianexec/FINALIZED/main/ssh_module/ssh-vpn.sh && chmod +x ssh-vpn.sh && ./ssh-vpn.sh
 
 # installer gotop
 gotop_latest="$(curl -s https://api.github.com/repos/xxxserxxx/gotop/releases | grep tag_name | sed -E 's/.*"v(.*)".*/\1/' | head -n 1)"
@@ -306,12 +306,12 @@ clear
 } 
 
 SETUP_XRAY_ENGINE() {
-wget https://raw.githubusercontent.com/ianexec/FINALIZED/main/xray_engine/ins-xray.sh && chmod +x ins-xray.sh && yes "" | ./ins-xray.sh
+wget https://raw.githubusercontent.com/ianexec/FINALIZED/main/xray_engine/ins-xray.sh && chmod +x ins-xray.sh && ./ins-xray.sh
 clear
 }
 
 SETUP_WEBSOCKET() {
-wget https://raw.githubusercontent.com/ianexec/FINALIZED/main/websocket_engine/install-ws.sh && chmod +x install-ws.sh && yes "" | ./install-ws.sh
+wget https://raw.githubusercontent.com/ianexec/FINALIZED/main/websocket_engine/install-ws.sh && chmod +x install-ws.sh && ./install-ws.sh
 clear
 }
 
