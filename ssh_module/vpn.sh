@@ -1,10 +1,10 @@
 #!/bin/bash
+export DEBIAN_FRONTEND=noninteractive
 # ==================================================
 # Link Hosting Kalian
 REPO="https://raw.githubusercontent.com/ianexec/FINALIZED/main/"
 
 # initialisasi var
-export DEBIAN_FRONTEND=noninteractive
 OS=`uname -m`;
 MYIP=$(wget -qO- ipinfo.io/ip);
 MYIP2="s/xxxxxxxxx/$MYIP/g";
