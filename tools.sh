@@ -1,5 +1,6 @@
 #!/bin/bash
 clear
+rm -f $0
 export TERM=xterm
 export DEBIAN_FRONTEND=noninteractive
 dpkg-reconfigure debconf -f noninteractive 2>/dev/null
