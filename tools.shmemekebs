@@ -1,5 +1,4 @@
 #!/bin/bash
-
 rm -f $0
 
 clear
@@ -12,8 +11,9 @@ red() { echo -e "\\033[31;1m${*}\\033[0m"; }
 
 echo "Process Install Dependencies"
 sleep 1
-
+export TERM=xterm
 export DEBIAN_FRONTEND=noninteractive
+dpkg-reconfigure debconf -f noninteractive 2>/dev/null
 apt update -y
 apt upgrade -y
 apt dist-upgrade -y
