@@ -1,5 +1,9 @@
 #!/bin/bash
 
+export TERM=xterm
+export DEBIAN_FRONTEND=noninteractive
+dpkg-reconfigure debconf -f noninteractive 2>/dev/null
+
 apt update
 apt install python3 -y
 apt install python3-pip -y
