@@ -48,43 +48,11 @@ def send_telegram_notification(user, service):
         pass
 
 def get_active_ips(user, service):
-    ip_log_path = f"/etc/lunatic/ssh/ip/{user}.log"
-    active_ip_set = set()
-    stored_ip_set = set()
-
     try:
         if service == "ssh":
-            # Ambil semua log login sukses
-            logs = subprocess.check_output(["journalctl", "--since", "today"], text=True)
-            user_lines = [line for line in logs.splitlines() if "Password auth succeeded" in line and f"'{user}'" in line]
-
-            for line in user_lines:
-                try:
-                    pid = line.split("dropbear[")[1].split("]")[0]
-                    ip = line.split("from ")[1].split(":")[0]
-
-                    # Cek PID hidup → aktif koneksi
-                    if subprocess.call(["ps", "-p", pid], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) == 0:
-                        active_ip_set.add(ip)
-                except:
-                    continue
-
-            # Baca IP lama dari file
-            if os.path.exists(ip_log_path):
-                with open(ip_log_path, 'r') as f:
-                    stored_ip_set = set(line.strip() for line in f if line.strip())
-
-            # Gabungkan IP aktif & IP lama → unik
-            all_ips = stored_ip_set.union(active_ip_set)
-
-            # Simpan ulang file IP
-            with open(ip_log_path, 'w') as f:
-                for ip in sorted(all_ips):
-                    f.write(ip + '\n')
-
-            return len(all_ips)
+            result = subprocess.run(["ps", "-ef"], stdout=subprocess.PIPE, text=True)
+            return len(set([line.split()[-1] for line in result.stdout.splitlines() if user in line]))
         else:
-            # Untuk layanan selain SSH
             if not os.path.exists(XRAY_ACCESS_LOG):
                 return 0
             with open(XRAY_ACCESS_LOG, 'r') as log_file:
@@ -149,3 +117,4 @@ if __name__ == "__main__":
     while True:
         check_and_autokill()
         time.sleep(CHECK_INTERVAL)
+        
