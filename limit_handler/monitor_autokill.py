@@ -50,8 +50,22 @@ def send_telegram_notification(user, service):
 def get_active_ips(user, service):
     try:
         if service == "ssh":
-            result = subprocess.run(["ps", "-ef"], stdout=subprocess.PIPE, text=True)
-            return len(set([line.split()[-1] for line in result.stdout.splitlines() if user in line]))
+            # Ambil semua login Dropbear dari journalctl
+            logs = subprocess.check_output(["journalctl", "--since", "today"], text=True)
+            user_lines = [line for line in logs.splitlines() if "Password auth succeeded" in line and f"'{user}'" in line]
+
+            ip_set = set()
+            for line in user_lines:
+                try:
+                    pid = line.split("dropbear[")[1].split("]")[0]
+                    ip = line.split("from ")[1].split(":")[0]
+
+                    # Cek apakah PID masih aktif
+                    if subprocess.call(["ps", "-p", pid], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) == 0:
+                        ip_set.add(ip)
+                except:
+                    continue
+            return len(ip_set)
         else:
             if not os.path.exists(XRAY_ACCESS_LOG):
                 return 0
