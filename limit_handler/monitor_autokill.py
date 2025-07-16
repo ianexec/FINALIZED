@@ -48,7 +48,7 @@ def send_telegram_notification(user, service):
         pass
 
 def get_active_ips(user, service):
-    ip_log_path = f"/etc/lunatic/ssh/ip/{user}"
+    ip_log_path = f"/etc/lunatic/ssh/ip/{user}.log"
     active_ip_set = set()
     stored_ip_set = set()
 
